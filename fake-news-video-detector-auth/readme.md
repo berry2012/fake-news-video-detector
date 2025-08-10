@@ -1,42 +1,28 @@
-# Fake News Video Detector
+# Fake News Video Detector with Authentication
 
 A ML model to detect misinformation in fake news video format.
-Model is deployed to Amazon EKS cluster
+Model is deployed to Amazon EKS cluster.
 
-![Sample News](./fake-news-video-detector-auth/orig.png)
 
-## Stack
-
-- Kubernetes Cluster
-- Karpenter
-- GPU instances
-- ML Model train from pre-trained ML
+![Sample News](./orig.png)
 
 ## create a repo
 
-```bash
 aws ecr get-login-password --region eu-west-1 --profile staging | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com
 
 aws ecr create-repository --repository-name video-authenticity-checker --region=eu-west-1 --profile staging
-```
 
 ## Build the container
 
-```bash
-docker build -t ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v8 .
-```
+docker build -t ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v11 .
 
 ## Run the container - locally
 
-```bash
-docker run -d --name video -p 8080:8080 ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v8
-```
+docker run -d --name video -p 8080:8080 ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v11
 
 ## push
 
-```bash
-docker push ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v8
-```
+docker push ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v11
 
 ## To use the system:
 
@@ -82,11 +68,11 @@ Press CTRL+C to quit
 192.168.7.46 - - [15/Mar/2025 23:37:48] "GET / HTTP/1.1" 200 -
 ```
 
-![Fake Result](./result.png)
+![Access Service](./landingpage.png)
 
-![Real Result](./real-result.png)
+![Real Result](./service-result.png)
 
-Note: If Kerpenter is terminating nodes too frequestly, change consolidation duration
+Note: If Kerpenter is terminating nodes too frequently, change consolidation duration
 
 ```yaml
 spec:

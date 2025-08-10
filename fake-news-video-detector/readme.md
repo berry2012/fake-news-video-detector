@@ -3,7 +3,7 @@
 A ML model to detect misinformation in fake news video format.
 Model is deployed to Amazon EKS cluster
 
-![Sample News](./fake-news-video-detector-auth/orig.png)
+![Sample News](./orig.png)
 
 ## Stack
 

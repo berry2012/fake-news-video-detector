@@ -1,0 +1,19 @@
+flask
+# torch==2.0.1
+# torchvision==0.15.2
+torch
+torchvision
+opencv-python
+numpy
+scikit-learn
+transformers
+tqdm
+matplotlib
+seaborn
+Pillow
+pathlib
+pandas
+python-multipart
+Werkzeug
+#torch==2.0.1+cu117
+#torchvision==0.15.2+cu117

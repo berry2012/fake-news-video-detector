@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Authenticity Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            display: none;
+        }
+        .loading {
+            display: none;
+        }
+        .video-display {
+            margin-top: 20px;
+        }
+        .frame-info {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add this near the top of your index.html -->
+    <div style="text-align: right; margin-bottom: 20px;">
+        Welcome, {{ username }}! 
+        <a href="{{ url_for('logout') }}" style="margin-left: 10px;">Logout</a>
+    </div>    
+    <div class="container">
+        <h1>Video Authenticity Checker</h1>
+        <form id="upload-form">
+            <input type="file" id="video" name="video" accept="video/*" required>
+            <button type="submit">Check Video</button>
+        </form>
+        <div id="loading" class="loading">
+            Processing video...
+        </div>
+        <div id="result" class="result"></div>
+        <div class="video-display">
+            <video id="videoPlayer" width="100%" controls>
+                Your browser does not support the video tag.
+            </video>
+            <div id="frameInfo" class="frame-info"></div>
+        </div>
+    </div>
+
+
+
+    <script>
+        const videoPlayer = document.getElementById('videoPlayer');
+        const frameInfo = document.getElementById('frameInfo');
+
+        // Update frame information while video is playing
+        videoPlayer.ontimeupdate = function() {
+            const currentTime = videoPlayer.currentTime;
+            const minutes = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime - minutes * 60);
+            const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            frameInfo.innerHTML = `
+                Current Time: ${formattedTime}<br>
+                Frame: ${Math.floor(currentTime * videoPlayer.playbackRate * 30)} <!-- Assuming 30fps -->
+            `;
+        };
+
+        document.getElementById('upload-form').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const videoFile = document.getElementById('video').files[0];
+            const form = new FormData();
+            form.append('video', videoFile);
+            
+            // Display the selected video
+            videoPlayer.src = URL.createObjectURL(videoFile);
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            
+            const startTime = performance.now();
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: form
+                });
+                const data = await response.json();
+                
+                const endTime = performance.now();
+                const processingTime = ((endTime - startTime) / 1000).toFixed(2);
+                
+                const resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.innerHTML = `Error: ${data.error}`;
+                } else {
+                    resultDiv.innerHTML = `
+                        Prediction: ${data.prediction}<br>
+                        Confidence: ${(data.confidence * 100).toFixed(2)}%<br>
+                        Processing Time: ${processingTime} seconds
+                    `;
+                }
+                resultDiv.style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>
