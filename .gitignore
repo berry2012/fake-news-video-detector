@@ -148,7 +148,7 @@ tensorboard/
 *.log
 
 # Jupyter notebook outputs
-*.ipynb
+# *.ipynb
 
 # IDE
 .vscode/
