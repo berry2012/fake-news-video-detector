@@ -12,7 +12,12 @@ Model is deployed to Amazon EKS cluster
 - GPU instances
 - ML Model train from pre-trained ML
 
-## create a repo
+## Building and Training Your Model
+
+- Use Amazon SageMaker to run the [Jupyter Notebook](./fake-news-video-detector/video.ipynb)
+- Model output will be saved as `best_video_model.pth`. It is needed in your Dockerfile 
+
+## Create a repo
 
 ```bash
 aws ecr get-login-password --region eu-west-1 --profile staging | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com

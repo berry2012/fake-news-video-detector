@@ -8,21 +8,29 @@ Model is deployed to Amazon EKS cluster.
 
 ## create a repo
 
+```bash
 aws ecr get-login-password --region eu-west-1 --profile staging | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com
 
 aws ecr create-repository --repository-name video-authenticity-checker --region=eu-west-1 --profile staging
+```
 
 ## Build the container
 
+```bash
 docker build -t ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v11 .
+```
 
 ## Run the container - locally
 
+```bash
 docker run -d --name video -p 8080:8080 ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v11
+```
 
 ## push
 
+```bash
 docker push ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/video-authenticity-checker:v11
+```
 
 ## To use the system:
 
