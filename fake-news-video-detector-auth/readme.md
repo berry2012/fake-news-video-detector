@@ -72,12 +72,3 @@ Press CTRL+C to quit
 
 ![Real Result](./service-result.png)
 
-Note: If Kerpenter is terminating nodes too frequently, change consolidation duration
-
-```yaml
-spec:
-  disruption:
-    budgets:
-    - nodes: 50%
-    consolidateAfter: 3600s
-```    
